@@ -23,7 +23,7 @@ waitUntil(() => window.Kameleoon).then(() => {
     ([element]) => {
       // adding event listener to the container of product
       Kameleoon.API.Utils.addUniversalClickListener(element, function (event) {
-        // w
+        // check offsetParent will be container of product
         if (!event.target.offsetParent.classList.contains("card-wrapper")) {
           return;
         }
