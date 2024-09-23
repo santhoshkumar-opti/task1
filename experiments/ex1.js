@@ -17,7 +17,7 @@ function waitUntil(predicate, time = 10000) {
 }
 
 waitUntil(() => window.Kameleoon).then(() => {
-  // attach the event listener to the product
+  // attach the event listener to the products container
   window.Kameleoon.API.Core.runWhenElementPresent(
     "#main-collection-product-grid",
     ([element]) => {
