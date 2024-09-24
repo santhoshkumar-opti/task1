@@ -1,5 +1,5 @@
 .kam-Reihenfolge-Tarifvergleichsseite {
-  .kam-change-order-plans {
+  [data-testid="plan-selection-radio-group"] {
     div {
       div {
         label:nth-child(1) {

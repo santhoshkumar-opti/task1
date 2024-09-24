@@ -5,8 +5,6 @@ setTimeout(() => {
     ([element]) => {
         // added base class in body element
         document.body.classList.add('kam-Reihenfolge-Tarifvergleichsseite');  
-        // added for modification purpose
-        element.classList.add('kam-change-order-plans');
     }
   );
 }, 6000);
