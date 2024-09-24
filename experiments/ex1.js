@@ -24,7 +24,7 @@ setTimeout(() => {
     true
   );
 
-  // for running the
+  // for running the timer when the badge products is present or not
   window.Kameleoon.API.Core.runWhenElementPresent(
     ".badge.badge--bottom-left",
     (elements) => {

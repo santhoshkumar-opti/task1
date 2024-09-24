@@ -28,7 +28,7 @@ setTimeout(() => {
 
         event.stopPropagation()
 
-        // check offsetParent will be container of product
+        // check current target has closest element we mentioned and then we get queryselector
         if (
           event.target
             .closest(".grid__item")

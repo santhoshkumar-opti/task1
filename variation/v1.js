@@ -1,22 +1,4 @@
-function waitUntil(predicate, time = 10000) {
-  return new Promise((resolve) => {
-    let int = setInterval(() => {
-      if (predicate()) {
-        resolve(predicate());
-        clearInterval(int);
-        int = null;
-      }
-    }, 15);
-    setTimeout(() => {
-      if (int !== null) {
-        clearInterval(int);
-        console.log("condition false");
-      }
-    }, time);
-  });
-}
-
-waitUntil(() => window.Kameleoon).then(() => {
+setTimeout(() => {
   window.Kameleoon.API.Core.runWhenElementPresent(
     ".badge.badge--bottom-left",
     (elements) => {
@@ -37,4 +19,4 @@ waitUntil(() => window.Kameleoon).then(() => {
     null,
     true
   );
-});
+}, 6000);
