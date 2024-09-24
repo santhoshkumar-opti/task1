@@ -1,0 +1,20 @@
+.kam-Reihenfolge-Tarifvergleichsseite {
+  .kam-change-order-plans {
+    div {
+      div {
+        label:nth-child(1) {
+          order: 4; // Assign unique order for each label
+        }
+        label:nth-child(2) {
+          order: 3;
+        }
+        label:nth-child(3) {
+          order: 2;
+        }
+        label:nth-child(4) {
+          order: 1;
+        }
+      }
+    }
+  }
+}
