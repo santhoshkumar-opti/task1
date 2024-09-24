@@ -20,11 +20,16 @@ waitUntil(() => window.Kameleoon).then(() => {
   // log when item is added to cart
   window.Kameleoon.API.Core.runWhenElementPresent(
     ".cart-notification.active",
-    ([]) => {
+    () => {
+      console.log('kameleoon logged')
+      const elementProductID =  Kameleoon.API.Utils.querySelectorAll("photo-grid")[0].getAttribute('data-product-id');
+      console.log('kameleoon element product', elementProductID);
+      const localStoredProductID = Kameleoon.API.Data.readLocalData("clickedOnBadged");
+      console.log('kameleoon local storage product', localStoredProductID);
+
       // when batch is present on product
       if (
-        localStorage.getItem("clickedOnBadged") &&
-        localStorage.getItem("clickedOnBadged") == 1
+        elementProductID == localStoredProductID
       ) {
         console.log("[T05] Add2Cart Badge-Produkt");
       }
@@ -37,6 +42,8 @@ waitUntil(() => window.Kameleoon).then(() => {
   window.Kameleoon.API.Core.runWhenElementPresent(
     "#main-collection-product-grid",
     ([element]) => {
+      console.log('kameleoon logged')
+
       // adding event listener to the container of product
       Kameleoon.API.Utils.addUniversalClickListener(element, function (event) {
         // check offsetParent will be container of product
@@ -44,12 +51,22 @@ waitUntil(() => window.Kameleoon).then(() => {
           return;
         }
         const self = event.target.offsetParent;
+
+        let productID = '';
         // only product that have batch we need to log here
         if (self.querySelectorAll(".badge.badge--bottom-left").length) {
-          localStorage.setItem("clickedOnBadged", "1");
-          return;
+          productID = self.parentElement.getAttribute('data-id')
+
         }
-        localStorage.setItem("clickedOnBadged", "0");
+        console.log('kameleoon product', productID);
+
+        const idTimeout = setTimeout(() => {
+          Kameleoon.API.Data.writeLocalData("clickedOnBadged", productID);
+          console.log('kameleoon successfully stored product', productID);
+
+          idTimeout && clearTimeout(idTimeout);
+        }, 100)
+
       });
     },
     null,
