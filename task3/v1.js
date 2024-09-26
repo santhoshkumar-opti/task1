@@ -41,6 +41,9 @@ setTimeout(function () {
   }
 
   function changeContent(cartSuccessContainer) {
+    // add class to the body for identification
+    document.body.classList.add('kamt1078');
+    // modifying content starts here
     changeSVGElement(cartSuccessContainer);
     changeAndInsertText(cartSuccessContainer);
   }
