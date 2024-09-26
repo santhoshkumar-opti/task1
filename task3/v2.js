@@ -3,34 +3,26 @@ const newSVGPath = `<svg class="ft-green-tick" xmlns="http://www.w3.org/2000/svg
         <path class="tick" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M14 27l5.917 4.917L34 17"/>
     </svg>`;
 
-const selector = {
-    mainContainer: '.offcanvas-cart-header.offcanvas-cart-header-add',
-    svgContainer: '.offcanvas-cart-header-icon > span.icon.icon-checkmark',
-    title: 'h6.offcanvas-cart-header-title',
-    infoText: 'p.offcanvas-cart-update-status-info',
-    productName: '.offcanvas-cart-product-name'
-}
-
 setTimeout(function () {
   function changeSVGElement(cartSuccessContainer) {
     const svgElement = cartSuccessContainer.querySelector(
-      selector.svgContainer
+      ".icon.icon-checkmark.icon-hidden"
     );
     svgElement.innerHTML = newSVGPath;
   }
 
   function changeAndInsertText(cartSuccessContainer) {
     const statuText = cartSuccessContainer.querySelector(
-      selector.infoText
+      "p.cart-update-status-info"
     );
     const titleEl = cartSuccessContainer.querySelector(
-     selector.title
+      "h6.cart-update-status-title"
     );
-    const productNameEl = cartSuccessContainer.querySelector(selector.productName);
+    const productNameEl = cartSuccessContainer.querySelector('.cart-update-status-title>span.cart-update-status-title-product-name.is--cart-update-product-name');
     // only create if element not present
     if (!statuText) {
       const pEl = document.createElement("p");
-      pEl.className = "offcanvas-cart-update-status-info";
+      pEl.className = "cart-update-status-info";
       pEl.innerText = "Gute Wahl!";
 
       //insert before the title element
@@ -46,7 +38,7 @@ setTimeout(function () {
   }
 
   Kameleoon.API.Core.runWhenElementPresent(
-    selector.mainContainer,
+    ".cart-update-status.is--cart-update-status-success:not(.hidden)",
     ([cartSuccessElement]) => changeContent(cartSuccessElement),
     null,
     true
