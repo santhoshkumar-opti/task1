@@ -8,6 +8,11 @@ const images = {
   vector: "https://storage.kameleoon.com/petitBateau/matiere/Vector.png",
 };
 
+const vectorSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="13" viewBox="0 0 18 13" fill="none">
+<path d="M1 6.5L17 6.5M17 6.5L12.3333 1.5M17 6.5L12.3333 11.5" stroke="#002E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+
 const hardCodedData = [
   {
     id: "laine",
@@ -69,15 +74,15 @@ function createWrapper(data) {
   const visitLinkContainer = document.createElement("div");
   visitLinkContainer.className = "kambloc-visit-link-container";
 
-  const visitLinkTitle = document.createElement("p");
-  visitLinkTitle.className = "kambloc-visit-link-title";
-  visitLinkTitle.textContent = subLinkText;
+//   const visitLinkTitle = document.createElement("p");
+//   visitLinkTitle.className = "kambloc-visit-link-title";
+//   visitLinkTitle.textContent = subLinkText;
 
-  const visitLinkImage = document.createElement("img");
-  visitLinkImage.src = images.vector;
+//   const visitLinkImage = document.createElement("img");
+//   visitLinkImage.src = vectorSvg;
 
-  visitLinkContainer.appendChild(visitLinkTitle);
-  visitLinkContainer.appendChild(visitLinkImage);
+  visitLinkContainer.innerHTML = createSubLinkContent();
+//   visitLinkContainer.appendChild(visitLinkImage);
 
   contentWrapper.appendChild(wrapperTitle);
   contentWrapper.appendChild(visitLinkContainer);
@@ -88,6 +93,14 @@ function createWrapper(data) {
   return wrapper;
 }
 
+
+
+function createSubLinkContent() {
+    return `<div class="kambloc-visit-link-container"><p class="kambloc-visit-link-title">Voir tout</p>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="13" viewBox="0 0 18 13" fill="none">
+<path d="M1 6.5L17 6.5M17 6.5L12.3333 1.5M17 6.5L12.3333 11.5" stroke="#002E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>`
+}
 function createWrapperContainer() {
 
   const wrapperContainer = document.createElement("div");
