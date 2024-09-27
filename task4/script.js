@@ -106,7 +106,8 @@ function createDivElement() {
   div.classList.add("kambloc-container");
 
   // Set the inner text
-  div.appendChild(createTitleContainer(), createWrapperContainer());
+  div.appendChild(createTitleContainer());
+  div.appendChild(createWrapperContainer());
 
   return div;
 }
