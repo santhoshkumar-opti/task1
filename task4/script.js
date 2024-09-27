@@ -74,15 +74,8 @@ function createWrapper(data) {
   const visitLinkContainer = document.createElement("div");
   visitLinkContainer.className = "kambloc-visit-link-container";
 
-//   const visitLinkTitle = document.createElement("p");
-//   visitLinkTitle.className = "kambloc-visit-link-title";
-//   visitLinkTitle.textContent = subLinkText;
-
-//   const visitLinkImage = document.createElement("img");
-//   visitLinkImage.src = vectorSvg;
 
   visitLinkContainer.innerHTML = createSubLinkContent();
-//   visitLinkContainer.appendChild(visitLinkImage);
 
   contentWrapper.appendChild(wrapperTitle);
   contentWrapper.appendChild(visitLinkContainer);
@@ -111,7 +104,7 @@ function createWrapperContainer() {
   return wrapperContainer;
 }
 
-function createDivElement() {
+function createMainContainerElement() {
   // Create a new div element
   const div = document.createElement("div");
 
@@ -146,7 +139,7 @@ function variation() {
     const productElement = findWhichProductElement(productsContainer, columns);
     console.log("Elements", columns);
 
-    productsContainer.insertBefore(createDivElement(), productElement);
+    productsContainer.insertBefore(createMainContainerElement(), productElement);
   }
 
   runWhenElementPresent("#search-result-items", ([plpListsElement]) =>
