@@ -92,8 +92,8 @@ function createWrapperContainer() {
 
   const wrapperContainer = document.createElement("div");
   wrapperContainer.className = "kambloc-wrapper-container";
-  const singleWrappers = hardCodedData.map((value) => createWrapper(value));
-  wrapperContainer.appendChild(...singleWrappers);
+  hardCodedData.forEach((value) => 
+    wrapperContainer.appendChild(createWrapper(value)));
 
   return wrapperContainer;
 }
