@@ -13,28 +13,59 @@ const vectorSvg = `
 <path d="M1 6.5L17 6.5M17 6.5L12.3333 1.5M17 6.5L12.3333 11.5" stroke="#002E5E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
 
+
+const goalsNames = {
+  common: 'Taux de clics sur les encarts matières',
+  laine: 'Clic Bloc Laine',
+  molleton: 'Clic Bloc Molletion',
+  tubique: 'Clic Bloc Tubique',
+  velours: 'Clic Bloc Velours'
+}
+
 const hardCodedData = [
   {
     id: "laine",
     name: "laine",
     img: images.slide1,
+    goal: goalsNames.laine,
   },
   {
     id: "molleton",
     name: "molleton",
     img: images.slide2,
+    goal: goalsNames.molleton,
   },
   {
     id: "tubique",
     name: "tubique",
     img: images.slide3,
+    goal: goalsNames.tubique,
   },
   {
     id: "velours",
     name: "velours",
     img: images.slide4,
+    goal: goalsNames.velours,
   },
 ];
+
+
+const redirectUrls = {
+  laine: "https://www.petit-bateau.fr/collection/s-equiper-pour-l-hiver/filtre/laine/?srule=rank1&selectedRefinementID=expand-link-PB_material",
+  molleton: "https://www.petit-bateau.fr/collection/s-equiper-pour-l-hiver/filtre/molleton/?srule=rank1&selectedRefinementID=expand-link-PB_material",
+  velours: "https://www.petit-bateau.fr/collection/s-equiper-pour-l-hiver/filtre/velours/?srule=rank1&selectedRefinementID=expand-link-PB_material",
+  tubique: "https://www.petit-bateau.fr/collection/s-equiper-pour-l-hiver/filtre/tubique/?srule=rank1&selectedRefinementID=expand-link-PB_material"
+}
+
+
+const varientGoals = {
+  [goalsNames.common]: 1,
+  [goalsNames.laine]: 2,
+  [goalsNames.molleton]: 3,
+  [goalsNames.tubique]: 4,
+  [goalsNames.velours]: 5
+}
+
 
 const subLinkText = "Voir tout";
 
@@ -118,28 +149,59 @@ function createMainContainerElement() {
   return div;
 }
 
+function findWhichProductElement(productsContainer, columns) {
+  const totalProductLists = productsContainer.querySelectorAll(
+    ".grid-tile.product-tile-container"
+  );
+
+  // for desktop
+  return totalProductLists[columns === 4 ? 16 : 8];
+}
+
 function variation() {
+
+
   const {
-    Core: { runWhenElementPresent },
+    Core: { runWhenElementPresent, processRedirect },
+    Utils,
+    Goals: {processConversion}
   } = Kameleoon.API;
 
-  function findWhichProductElement(productsContainer, columns) {
-    const totalProductLists = productsContainer.querySelectorAll(
-      ".grid-tile.product-tile-container"
-    );
 
-    // for desktop
-    return totalProductLists[columns === 4 ? 16 : 8];
+  function sendGoalsAndRedirect() {
+    const linksWrapper = Utils.querySelectorAll('.kambloc-container > .kambloc-wrapper-container')[0];
+
+    debugger
+    Utils.addUniversalClickListener(linksWrapper, ({target}) => {
+
+      debugger
+
+      const clickOnSegement = hardCodedData.find((value) => target.closest(`#${value.id}`));
+
+      if (clickOnSegement) {
+
+        // common goal
+        processConversion(varientGoals[goalsNames.common]);
+        // seperate goal
+        processConversion(varientGoals[clickOnSegement.goal]);
+        // redirect to the specific segments
+        processRedirect(redirectUrls[clickOnSegement.id])
+
+      }
+    });
   }
+
 
   function insertContainer(productsContainer) {
     const columns =
       getComputedStyle(productsContainer).gridTemplateColumns.split(" ").length;
 
     const productElement = findWhichProductElement(productsContainer, columns);
-    console.log("Elements", columns);
 
     productsContainer.insertBefore(createMainContainerElement(), productElement);
+
+
+    sendGoalsAndRedirect(); 
   }
 
   runWhenElementPresent("#search-result-items", ([plpListsElement]) =>
