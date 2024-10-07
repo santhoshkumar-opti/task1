@@ -46,6 +46,10 @@
                 Zum Merkzettel
                 <i data-icon="arrow-right" class="icon-arrow-right base-icon d-flex"></i>
             </div>
+            <div class="kam-add-cart-btn">
+                Alles in den Warenkorb
+                <i data-icon="navigation-items-cart" class="icon-navigation-items-cart" style="font-size: 1.125rem; line-height: 1; color: inherit;"></i>
+            </div>
             <div class="kam-close-icon-wrapper">
                 <div class="kam-close-icon">
                     <div class="kam-icon-extra"></div>
@@ -67,12 +71,36 @@
   function variation() {
     const {
       Core: { runWhenElementPresent },
+      Utils
     } = Kameleoon.API;
+
+
+    function listenEvents() {
+
+      const [popupWrapper] = Utils.querySelectorAll('body.kam-t53-handled > .kam-t53-wrapper');
+
+      Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
+        if (target.closest('.kam-close-icon-wrapper')) {
+          console.log('close icon clicked');
+        } else if (target.closest('.kam-wish-btn')) {
+          console.log('wish clicked');
+        } else if (target.closest('.kam-add-cart-btn')) {
+          console.log('cart clicked');
+        } else if (target.classList.contains('kam-t53-wrapper')) {
+          console.log('back drop clicked');
+        }
+      })
+
+    }
+
 
     function preparePopup([bodyElement]) {
       bodyElement.classList.add("kam-t53-handled");
 
       bodyElement.insertAdjacentHTML("afterbegin", template);
+
+
+      listenEvents();
     }
 
     runWhenElementPresent("body", preparePopup);
