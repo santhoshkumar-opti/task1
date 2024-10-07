@@ -65,13 +65,17 @@
     </div>`;
 
   function variation() {
-    const { Utils } = Kameleoon;
+    const {
+      Core: { runWhenElementPresent },
+    } = Kameleoon.API;
 
-    const [bodyElement] = Utils.querySelectorAll("body");
+    function preparePopup([bodyElement]) {
+      bodyElement.classList.add("kam-t53-handled");
 
-    bodyElement.classList.add("kam-t53-handled");
+      bodyElement.insertAdjacentHTML("afterbegin", template);
+    }
 
-    bodyElement.insertAdjacentHTML("afterbegin", template);
+    runWhenElementPresent("body", preparePopup);
   }
 
   setTimeout(variation, 5000);
