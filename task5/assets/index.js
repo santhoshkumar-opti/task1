@@ -1,5 +1,5 @@
 function createNewProductDesign(data) {
-    return `
+  return `
       <div class="kam-product">
           <div class="kam-img-wrapper">
               <img class="kam-img" src="${data.img}">
@@ -15,14 +15,13 @@ function createNewProductDesign(data) {
               </div>
           </div>
       </div>`;
-  }
+}
 
-
-  function createPopupTemplate(productContents) {
-    return `<div class="kam-t53-wrapper">
+function createPopupTemplate(productContents) {
+  return `<div class="kam-t53-wrapper">
         <div class="kam-t53-container">
             <div class="kam-product-list">
-                    ${productContents.join('')}
+                    ${productContents.join("")}
             </div>
             <div class="kam-headline">Gute Wahl!</div>
             <div class="kam-subline">
@@ -52,69 +51,85 @@ function createNewProductDesign(data) {
                 </div>
             </div>
         </div>
-    </div>`
-  }
+    </div>`;
+}
 
-  
 (function () {
   function variation() {
     const {
-      Core: { runWhenElementPresent },
+      Core: { runWhenElementPresent, processRedirect },
       Utils,
     } = Kameleoon.API;
 
-
-    function listenEvents() {
-
-  
-        const [popupWrapper] = Utils.querySelectorAll(
-          "body.kam-t53-handled > .kam-t53-wrapper"
-        );
-  
-        Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
-          if (target.closest(".kam-close-icon-wrapper")) {
-            console.log("close icon clicked");
-            document.body.classList.remove("kam-t53-handled");
-            popupWrapper.remove();
-          } else if (target.closest(".kam-wish-btn")) {
-            console.log("wish clicked");
-          } else if (target.closest(".kam-add-cart-btn")) {
-            console.log("cart clicked");
-          } else if (target.classList.contains("kam-t53-wrapper")) {
-            document.body.classList.remove("kam-t53-handled");
-            popupWrapper.remove();
-          }
-        });
-      }
-
-
+    let offcanvas;
 
     function getWishListProductData(productLists) {
 
-        const lastProducts = productLists.slice(productLists.length - 2);
+      const lastProducts = productLists.slice(productLists.length - 2);
 
-        const newProductDesignTEXTHTML = [];
+      const newProductDesignTEXTHTML = [];
 
-        lastProducts.forEach((product) => {
-            const collectedData = {
-                img: product.querySelector('img').src,
-                title: product.querySelector('[data-entity="product-name"]').innerText,
-                color: product.querySelector('a.link-wrapper ~ span').innerText,
-                price: product.querySelector('[data-entity="product-price-wrapper"] > span').innerText,
-                extra: product.querySelector('a.link-wrapper ~ span ~ div ~ span').innerText
-            }
+      lastProducts.forEach((product) => {
+        const collectedData = {
+          img: product.querySelector("img").src,
+          title: product.querySelector('[data-entity="product-name"]')
+            .innerText,
+          color: product.querySelector("a.link-wrapper ~ span").innerText,
+          price: product.querySelector(
+            '[data-entity="product-price-wrapper"] > span'
+          ).innerText,
+          extra: product.querySelector("a.link-wrapper ~ span ~ div ~ span")
+            .innerText,
+        };
 
-            newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
-        });
+        newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
+      });
+
+      document.body.insertAdjacentHTML(
+        "afterbegin",
+        createPopupTemplate(newProductDesignTEXTHTML)
+      );
+
+      const [popupWrapper] = Utils.querySelectorAll(
+        "body.kam-t53-handled > .kam-t53-wrapper"
+      );
+
+      Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
+
+        if (target.closest(".kam-close-icon-wrapper")) {
+
+          offcanvas.style.display = "";
+          popupWrapper.remove();
+          document.body.classList.remove("kam-t53-handled");
+          offcanvas.querySelector('#offcanvas-outlet > div:first-child').click();
+
+        } else if (target.closest(".kam-wish-btn")) {
+
+          processRedirect('https://www.ernstings-family.de/WishListResultDisplayView?catalogId=10051&storeId=10151&langId=-3')
     
-        document.body.insertAdjacentHTML('afterbegin', createPopupTemplate(newProductDesignTEXTHTML))
+        } else if (target.closest(".kam-add-cart-btn")) {
+  
+          offcanvas.querySelector('a[data-ef-tcedata*="Multi_Add2Cart"]').click();
+          popupWrapper.remove();
+          document.body.classList.remove("kam-t53-handled");
+  
+        } else if (target.classList.contains("kam-t53-wrapper")) {
+  
+          offcanvas.style.display = "";
+          popupWrapper.remove();
+          document.body.classList.remove("kam-t53-handled");
+          offcanvas.querySelector('#offcanvas-outlet > div:first-child').click();
 
-
-        listenEvents()
+        }
+      });
     }
 
     function listenWishListClick([wishListEl]) {
       document.body.classList.add("kam-t53-handled");
+
+      [offcanvas] = Utils.querySelectorAll('#offcanvas-outlet');
+
+      offcanvas.style.display = 'none'
 
       Utils.addUniversalClickListener(wishListEl, () => {
         console.log("wishListEvent");
