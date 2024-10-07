@@ -71,36 +71,37 @@
   function variation() {
     const {
       Core: { runWhenElementPresent },
-      Utils
+      Utils,
     } = Kameleoon.API;
 
-
-    function listenEvents() {
-
-      const [popupWrapper] = Utils.querySelectorAll('body.kam-t53-handled > .kam-t53-wrapper');
+    function listenEvents(bodyElement) {
+  
+      const [popupWrapper] = Utils.querySelectorAll(
+        "body.kam-t53-handled > .kam-t53-wrapper"
+      );
 
       Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
-        if (target.closest('.kam-close-icon-wrapper')) {
-          console.log('close icon clicked');
-        } else if (target.closest('.kam-wish-btn')) {
-          console.log('wish clicked');
-        } else if (target.closest('.kam-add-cart-btn')) {
-          console.log('cart clicked');
-        } else if (target.classList.contains('kam-t53-wrapper')) {
-          console.log('back drop clicked');
+        if (target.closest(".kam-close-icon-wrapper")) {
+          console.log("close icon clicked");
+          bodyElement.classList.remove("kam-t53-handled");
+          popupWrapper.remove();
+        } else if (target.closest(".kam-wish-btn")) {
+          console.log("wish clicked");
+        } else if (target.closest(".kam-add-cart-btn")) {
+          console.log("cart clicked");
+        } else if (target.classList.contains("kam-t53-wrapper")) {
+          bodyElement.classList.remove("kam-t53-handled");
+          popupWrapper.remove();
         }
-      })
-
+      });
     }
-
 
     function preparePopup([bodyElement]) {
       bodyElement.classList.add("kam-t53-handled");
 
       bodyElement.insertAdjacentHTML("afterbegin", template);
 
-
-      listenEvents();
+      listenEvents(bodyElement);
     }
 
     runWhenElementPresent("body", preparePopup);
