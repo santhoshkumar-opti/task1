@@ -40,7 +40,7 @@ function createPopupTemplate(productContents) {
                     <div class="kam-icon-extra"></div>
                     <svg class="kam-icon">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                            xlink:href="/wcsstore/ErnstingsStorefrontAssetStore/svg/efa.svg#close"></use>
+                          xlink:href="/wcsstore/ErnstingsStorefrontAssetStore/svg/efa.svg#close"></use>
                     </svg>
                 </div>
             </div>
@@ -64,7 +64,6 @@ function createPopupTemplate(productContents) {
     let offcanvas;
 
     function getWishListProductData(productLists) {
-
       const lastProducts = productLists.slice(productLists.length - 2);
 
       const newProductDesignTEXTHTML = [];
@@ -95,44 +94,43 @@ function createPopupTemplate(productContents) {
       );
 
       Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
-
         if (target.closest(".kam-close-icon-wrapper")) {
-
-          offcanvas.style.display = "";
           popupWrapper.remove();
           document.body.classList.remove("kam-t53-handled");
-          offcanvas.querySelector('#offcanvas-outlet > div:first-child').click();
-
+          offcanvas
+            .querySelector("#offcanvas-outlet > div:first-child")
+            .click();
+          offcanvas.style.display = "";
         } else if (target.closest(".kam-wish-btn")) {
-
-          processRedirect('https://www.ernstings-family.de/WishListResultDisplayView?catalogId=10051&storeId=10151&langId=-3')
-    
+          processRedirect(
+            "https://www.ernstings-family.de/WishListResultDisplayView?catalogId=10051&storeId=10151&langId=-3"
+          );
         } else if (target.closest(".kam-add-cart-btn")) {
-  
-          offcanvas.querySelector('a[data-ef-tcedata*="Multi_Add2Cart"]').click();
+          offcanvas
+            .querySelector('a[data-ef-tcedata*="Multi_Add2Cart"]')
+            .click();
           popupWrapper.remove();
           document.body.classList.remove("kam-t53-handled");
-  
         } else if (target.classList.contains("kam-t53-wrapper")) {
-  
-          offcanvas.style.display = "";
           popupWrapper.remove();
           document.body.classList.remove("kam-t53-handled");
-          offcanvas.querySelector('#offcanvas-outlet > div:first-child').click();
-
+          offcanvas
+            .querySelector("#offcanvas-outlet > div:first-child")
+            .click();
+          offcanvas.style.display = "";
         }
       });
     }
 
     function listenWishListClick([wishListEl]) {
-      document.body.classList.add("kam-t53-handled");
-
-      [offcanvas] = Utils.querySelectorAll('#offcanvas-outlet');
-
-      offcanvas.style.display = 'none'
+      [offcanvas] = Utils.querySelectorAll("#offcanvas-outlet");
 
       Utils.addUniversalClickListener(wishListEl, () => {
         console.log("wishListEvent");
+
+        offcanvas.style.display = "none";
+
+        document.body.classList.add("kam-t53-handled");
 
         runWhenElementPresent(
           "#offcanvas-outlet .offcanvas-body > div > div:first-child > div:first-child > div > div:nth-child(n)",
