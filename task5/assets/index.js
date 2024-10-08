@@ -1,5 +1,5 @@
 function createNewProductDesign(data) {
-  return `
+	return `
       <div class="kam-product">
           <div class="kam-img-wrapper">
               <img class="kam-img" src="${data.img}">
@@ -18,10 +18,10 @@ function createNewProductDesign(data) {
 }
 
 function createPopupTemplate(productContents) {
-  return `<div class="kam-t53-wrapper">
+	return `<div class="kam-t53-wrapper">
         <div class="kam-t53-container">
             <div class="kam-product-list">
-                    ${productContents.join("")}
+                    ${productContents.join('')}
             </div>
             <div class="kam-headline">Gute Wahl!</div>
             <div class="kam-subline">
@@ -55,43 +55,43 @@ function createPopupTemplate(productContents) {
 }
 
 (function () {
-  function variation() {
-    const {
-      Core: { runWhenElementPresent, processRedirect },
-      Utils,
-    } = Kameleoon.API;
+	function variation() {
+		const {
+			Core: { runWhenElementPresent, processRedirect },
+			Utils,
+		} = Kameleoon.API;
 
-    let offcanvas;
+		let offcanvas;
 
-    function getWishListProductData(productLists) {
-      const lastProducts = productLists.slice(productLists.length - 2);
+		function getWishListProductData(productLists) {
+			const lastProducts = productLists.slice(productLists.length - 2);
 
-      const newProductDesignTEXTHTML = [];
+			const newProductDesignTEXTHTML = [];
 
-      lastProducts.forEach((product) => {
-        const collectedData = {
-          img: product.querySelector("img").src,
-          title: product.querySelector('[data-entity="product-name"]')
-            .innerText,
-          color: product.querySelector("a.link-wrapper ~ span").innerText,
-          price: product.querySelector(
-            '[data-entity="product-price-wrapper"] > span'
-          ).innerText,
-          extra: product.querySelector("a.link-wrapper ~ span ~ div ~ span")
-            .innerText,
-        };
+			lastProducts.forEach((product) => {
+				const collectedData = {
+					img: product.querySelector('img').src,
+					title: product.querySelector('[data-entity="product-name"]')
+						.innerText,
+					color: product.querySelector('a.link-wrapper ~ span').innerText,
+					price: product.querySelector(
+						'[data-entity="product-price-wrapper"] > span'
+					).innerText,
+					extra: product.querySelector('a.link-wrapper ~ span ~ div ~ span')
+						.innerText,
+				};
 
-        newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
-      });
+				newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
+			});
 
-      document.body.insertAdjacentHTML(
-        "afterbegin",
-        createPopupTemplate(newProductDesignTEXTHTML)
-      );
+			document.body.insertAdjacentHTML(
+				'afterbegin',
+				createPopupTemplate(newProductDesignTEXTHTML)
+			);
 
-      const [popupWrapper] = Utils.querySelectorAll(
-        "body.kam-t53-handled > .kam-t53-wrapper"
-      );
+			const [popupWrapper] = Utils.querySelectorAll(
+				'body.kam-t53-handled > .kam-t53-wrapper'
+			);
 
       Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
         if (target.closest(".kam-close-icon-wrapper")) {
@@ -100,7 +100,7 @@ function createPopupTemplate(productContents) {
           offcanvas
             .querySelector("#offcanvas-outlet > div:first-child")
             .click();
-          offcanvas.style.display = "";
+          offcanvas.classList.remove("kam-t53-hide-element");
         } else if (target.closest(".kam-wish-btn")) {
           processRedirect(
             "https://www.ernstings-family.de/WishListResultDisplayView?catalogId=10051&storeId=10151&langId=-3"
@@ -117,33 +117,37 @@ function createPopupTemplate(productContents) {
           offcanvas
             .querySelector("#offcanvas-outlet > div:first-child")
             .click();
-          offcanvas.style.display = "";
+          offcanvas.classList.remove("kam-t53-hide-element");
         }
       });
-    }
+		}
 
-    function listenWishListClick([wishListEl]) {
-      [offcanvas] = Utils.querySelectorAll("#offcanvas-outlet");
+	    function listenWishListClick([wishListEl]) {
 
-      Utils.addUniversalClickListener(wishListEl, () => {
-        console.log("wishListEvent");
+        function waitForSideBar([offCanvas]) {
 
-        offcanvas.style.display = "none";
+            offcanvas = offCanvas;
 
-        document.body.classList.add("kam-t53-handled");
+            Utils.addUniversalClickListener(wishListEl, () => {
+                offcanvas.classList.add('kam-t53-hide-element');
 
-        runWhenElementPresent(
-          "#offcanvas-outlet .offcanvas-body .container",
-          getWishListProductData
-        );
-      });
+                document.body.classList.add('kam-t53-handled');
+
+                runWhenElementPresent(
+                    '#offcanvas-outlet .offcanvas-body .container',
+                    getWishListProductData
+                );
+            });
+        }
+
+        runWhenElementPresent('#offcanvas-outlet', waitForSideBar);
     }
 
     runWhenElementPresent(
-      '[data-entity="open-wishlist-offcanvas-btn"]',
-      listenWishListClick
+        '[data-entity="open-wishlist-offcanvas-btn"]',
+        listenWishListClick
     );
-  }
+	}
 
-  setTimeout(variation, 5000);
+	setTimeout(variation, 5000);
 })();
