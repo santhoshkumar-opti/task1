@@ -17,10 +17,10 @@ function createNewProductDesign(data) {
     </div>`;
 }
 function createPopupTemplate(productContents) {
-	return `<div class="kam-t53-wrapper">
+  return `<div class="kam-t53-wrapper">
         <div class="kam-t53-container">
             <div class="kam-product-list">
-                    ${productContents.join('')}
+                    ${productContents.join("")}
             </div>
             <div class="kam-headline">Gute Wahl!</div>
             <div class="kam-subline">
@@ -54,41 +54,42 @@ function createPopupTemplate(productContents) {
 }
 
 (function () {
-	function variation() {
-		const {
-			Core: { runWhenElementPresent, processRedirect },
-			Utils,
-		} = Kameleoon.API;
+  function variation() {
+    const {
+      Core: { runWhenElementPresent, processRedirect },
+      Utils,
+    } = Kameleoon.API;
 
-		let offcanvas;
+    let offcanvas;
 
-		function getWishListProductData(productLists) {
-			const lastProducts = productLists.slice(productLists.length - 2);
+    function getWishListProductData(productLists) {
+      const lastProducts = productLists.slice(productLists.length - 2);
 
-			const newProductDesignTEXTHTML = [];
+      const newProductDesignTEXTHTML = [];
 
-			lastProducts.forEach((product) => {
-				const collectedData = {
-					img: product.querySelector('img').src,
-					title: product.querySelector('[data-entity="product-name"]')
-						.outerHTML,
-					color: product.querySelector('a.link-wrapper ~ span').outerHTML,
-					price: product.querySelector('[data-entity="product-price-wrapper"]').innerHTML,
-					extra: product.querySelector('a.link-wrapper ~ span ~ div ~ span')
-						.outerHTML,
-				};
+      lastProducts.forEach((product) => {
+        const collectedData = {
+          img: product.querySelector("img").src,
+          title: product.querySelector('[data-entity="product-name"]')
+            .outerHTML,
+          color: product.querySelector("a.link-wrapper ~ span").outerHTML,
+          price: product.querySelector('[data-entity="product-price-wrapper"]')
+            .innerHTML,
+          extra: product.querySelector("a.link-wrapper ~ span ~ div ~ span")
+            .outerHTML,
+        };
 
-				newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
-			});
+        newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
+      });
 
-			document.body.insertAdjacentHTML(
-				'afterbegin',
-				createPopupTemplate(newProductDesignTEXTHTML)
-			);
+      document.body.insertAdjacentHTML(
+        "afterbegin",
+        createPopupTemplate(newProductDesignTEXTHTML)
+      );
 
-			const [popupWrapper] = Utils.querySelectorAll(
-				'body.kam-t53-handled > .kam-t53-wrapper'
-			);
+      const [popupWrapper] = Utils.querySelectorAll(
+        "body.kam-t53-handled > .kam-t53-wrapper"
+      );
 
       Utils.addUniversalClickListener(popupWrapper, ({ target }) => {
         if (target.closest(".kam-close-icon-wrapper")) {
@@ -117,34 +118,35 @@ function createPopupTemplate(productContents) {
           offcanvas.classList.remove("kam-t53-hide-element");
         }
       });
-		}
+    }
 
-	    function listenWishListClick([wishListEl]) {
+    function listenWishListClick([wishListEl]) {
+      function waitForSideBar([offCanvas]) {
+        offcanvas = offCanvas;
 
-        function waitForSideBar([offCanvas]) {
+        Utils.addUniversalClickListener(wishListEl, () => {
+          // when no item is present in wish list
+          if (!wishListEl.querySelector('[class*="quick-navigation-bubble"]')) return;
 
-            offcanvas = offCanvas;
+          offcanvas.classList.add("kam-t53-hide-element");
 
-            Utils.addUniversalClickListener(wishListEl, () => {
-                offcanvas.classList.add('kam-t53-hide-element');
+          document.body.classList.add("kam-t53-handled");
 
-                document.body.classList.add('kam-t53-handled');
+          runWhenElementPresent(
+            "#offcanvas-outlet .offcanvas-body .container",
+            getWishListProductData
+          );
+        });
+      }
 
-                runWhenElementPresent(
-                    '#offcanvas-outlet .offcanvas-body .container',
-                    getWishListProductData
-                );
-            });
-        }
-
-        runWhenElementPresent('#offcanvas-outlet', waitForSideBar);
+      runWhenElementPresent("#offcanvas-outlet", waitForSideBar);
     }
 
     runWhenElementPresent(
-        '[data-entity="open-wishlist-offcanvas-btn"]',
-        listenWishListClick
+      '[data-entity="open-wishlist-offcanvas-btn"]',
+      listenWishListClick
     );
-	}
+  }
 
-	setTimeout(variation, 5000);
+  setTimeout(variation, 5000);
 })();
