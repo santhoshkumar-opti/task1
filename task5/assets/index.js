@@ -133,7 +133,7 @@ function createPopupTemplate(productContents) {
         document.body.classList.add("kam-t53-handled");
 
         runWhenElementPresent(
-          "#offcanvas-outlet .offcanvas-body > div > div:first-child > div:first-child > div > div:nth-child(n)",
+          "#offcanvas-outlet .offcanvas-body .container",
           getWishListProductData
         );
       });
