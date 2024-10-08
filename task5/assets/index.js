@@ -1,22 +1,21 @@
 function createNewProductDesign(data) {
-	return `
-      <div class="kam-product">
-          <div class="kam-img-wrapper">
-              <img class="kam-img" src="${data.img}">
-          </div>
-          <div class="kam-product-info">
-              <div class="kam-name">${data.title}</div>
-              <div class="kam-color">${data.color}</div>
-              <div class="kam-price">
-                  <div class="kam-original">${data.price}</div>
-              </div>
-              <div class="kam-extra">
-                  ${data.extra}
-              </div>
-          </div>
-      </div>`;
+  return `
+    <div class="kam-product">
+        <div class="kam-img-wrapper">
+            <img class="kam-img" src="${data.img}">
+        </div>
+        <div class="kam-product-info">
+            <div class="kam-name">${data.title}</div>
+            <div class="kam-color">${data.color}</div>
+            <div class="kam-price">
+               ${data.price}
+            </div>
+            <div class="kam-extra">
+                ${data.extra}
+            </div>
+        </div>
+    </div>`;
 }
-
 function createPopupTemplate(productContents) {
 	return `<div class="kam-t53-wrapper">
         <div class="kam-t53-container">
@@ -72,13 +71,11 @@ function createPopupTemplate(productContents) {
 				const collectedData = {
 					img: product.querySelector('img').src,
 					title: product.querySelector('[data-entity="product-name"]')
-						.innerText,
-					color: product.querySelector('a.link-wrapper ~ span').innerText,
-					price: product.querySelector(
-						'[data-entity="product-price-wrapper"] > span'
-					).innerText,
+						.outerHTML,
+					color: product.querySelector('a.link-wrapper ~ span').outerHTML,
+					price: product.querySelector('[data-entity="product-price-wrapper"]').innerHTML,
 					extra: product.querySelector('a.link-wrapper ~ span ~ div ~ span')
-						.innerText,
+						.outerHTML,
 				};
 
 				newProductDesignTEXTHTML.push(createNewProductDesign(collectedData));
